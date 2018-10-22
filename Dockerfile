@@ -6,7 +6,7 @@ RUN apt-get -y install libevent-dev
 
 ADD ./ ./
 
-g++ -std=c++11  -o server  main.cpp ./httpserver/Client.cpp ./httpserver/HttpServer.cpp ./httpserver/WorkerQueue.cpp ./httpserver/MimeType.cpp ./httpserver/HttpResponse.cpp ./httpserver/HttpRequest.cpp ./httpserver/HttpRequestParser.cpp ./httpserver/HttpRequestHandler.cpp  -levent -levent_pthreads -lpthread
+RUN g++ -std=c++11  -o server  main.cpp ./httpserver/Client.cpp ./httpserver/HttpServer.cpp ./httpserver/WorkerQueue.cpp ./httpserver/MimeType.cpp ./httpserver/HttpResponse.cpp ./httpserver/HttpRequest.cpp ./httpserver/HttpRequestParser.cpp ./httpserver/HttpRequestHandler.cpp  -levent -levent_pthreads -lpthread
 
 EXPOSE 80
 

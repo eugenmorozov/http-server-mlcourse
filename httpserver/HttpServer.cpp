@@ -42,8 +42,9 @@ namespace http {
             if (nWorkers == 0) {
                 nWorkers = Configuration::nWorkers;
             }
-
+            //инициализация использования libevent
             base = event_base_new();
+
             if (evthread_make_base_notifiable(base) < 0) {
                 event_base_free(base);
                 throw std::runtime_error("Couldn't make base notifiable!");
@@ -55,6 +56,13 @@ namespace http {
             listenAddr.sin_port = htons(port);
 
             WorkerQueue::workerqueueInit((workerqueue_t *) &workerqueue, nWorkers);
+            //Запускаем монитор событий на событийной базе.
+            // При поступлении запроса на соединение вызывается
+            //connection callback
+            //Flags :
+            //LEV_OPT_CLOSE_ON_FREE при удалении объекта evconnlistener автоматически закрывается связанный с ним сокет;
+            //LEV_OPT_REUSEABLE убрать кулдаун порта
+            //LEV_OPT_THREADSAFE включаем блокировки для многопоточности
             listener = evconnlistener_new_bind(base, connectionCallback, (void *) &workerqueue,
                                                LEV_OPT_CLOSE_ON_FREE | LEV_OPT_REUSEABLE | LEV_OPT_THREADSAFE,
                                                SOMAXCONN,
@@ -67,6 +75,8 @@ namespace http {
             }
 
             evconnlistener_set_error_cb(listener, errorCallback);
+
+            //цикл обработки событий, выдающий оповещения
             event_base_dispatch(base);
             event_base_free(base);
             WorkerQueue::workerqueueShutdown(&workerqueue);
@@ -80,6 +90,9 @@ namespace http {
                 int socklen,
                 void *arg) {
             struct event_base *base = evconnlistener_get_base(listener);
+            //создание буфера ввода-вывода на основе
+            //событийной базы base
+            //и файлового дескриптора fd
             struct bufferevent *bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_THREADSAFE);
 
             workerqueue_t *workerqueue = (workerqueue_t *) arg;
@@ -97,6 +110,7 @@ namespace http {
         void HttpServer::serverJobFunction(job *job) {
             Client *client = (Client *) job->user_data;
             bufferevent_setcb(client->getBuf_ev(), readCallback, writeCallback, eventCallback, NULL);
+            //инициализируем использование buffered event
             bufferevent_enable(client->getBuf_ev(), EV_PERSIST | EV_READ);
 
             delete client;
@@ -116,6 +130,7 @@ namespace http {
             requestParser.parse(request, data, length);
             http::server::HttpRequestHandler requestHandler(rootDir_);
             requestHandler.handleRequest(&request, &response);
+            //добавление данных в буфер
             evbuffer_add(bufferevent_get_output(bev), response.toString().c_str(), response.toString().length());
 
             free(data);

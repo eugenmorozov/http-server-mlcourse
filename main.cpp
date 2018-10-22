@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    std::cout << "server started." << std::endl;
+    std::cout << "server started on used port." << std::endl;
     HttpServer *httpServer = new HttpServer();
     httpServer->startServer(port, workers, rootDir);
     delete httpServer;
