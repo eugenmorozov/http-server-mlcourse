@@ -16,4 +16,4 @@ RUN g++ -std=c++11  -o server  main.cpp ./httpserver/Client.cpp ./httpserver/Htt
 
 EXPOSE 80
 
-CMD ./server -p3000 -w50
+CMD ./server -p80 -w20
