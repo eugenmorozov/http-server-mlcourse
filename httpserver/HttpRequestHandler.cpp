@@ -31,6 +31,7 @@ namespace http {
                 return;
             }
             std::string resoursePath = request->getUri();
+            std::cout<<request->getUri()<<"/n";
 
             if (!urlDecode(request->getUri(), &resoursePath)) {
                 *response = HttpResponse::stockReply(HttpResponse::BAD_REQUEST);
