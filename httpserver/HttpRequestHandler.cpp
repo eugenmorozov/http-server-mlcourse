@@ -31,7 +31,6 @@ namespace http {
                 return;
             }
             std::string resoursePath = request->getUri();
-            std::cout<<request->getUri()<<"/n";
 
             if (!urlDecode(request->getUri(), &resoursePath)) {
                 *response = HttpResponse::stockReply(HttpResponse::BAD_REQUEST);
@@ -51,6 +50,7 @@ namespace http {
                 indexFile = true;
             }
             std::string fullPath = docRoot_ + resoursePath;
+            std::cout<<fullPath<<"/n";
 
             if (access(fullPath.c_str(), 0) == -1) {
                 if (indexFile) {
