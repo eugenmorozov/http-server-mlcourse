@@ -8,10 +8,10 @@ RUN apt-get -y install libevent-dev
 #RUN git clone https://github.com/init/http-test-suite.git
 
 RUN mkdir -p /var/www/html
-#ADD ./ ./http-test-suite
-#WORKDIR ./http-test-suite
+ADD ./ ./http-test-suite
+WORKDIR ./http-test-suite
 
-#ADD ./ ./
+ADD ./ ./
 
 RUN g++ -std=c++11  -o server  main.cpp ./httpserver/Client.cpp ./httpserver/HttpServer.cpp ./httpserver/WorkerQueue.cpp ./httpserver/MimeType.cpp ./httpserver/HttpResponse.cpp ./httpserver/HttpRequest.cpp ./httpserver/HttpRequestParser.cpp ./httpserver/HttpRequestHandler.cpp  -levent -levent_pthreads -lpthread
 
