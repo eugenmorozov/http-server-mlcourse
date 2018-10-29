@@ -10,6 +10,6 @@ public:
     static char *ROOT_DIR;
 };
 
-char *Configuration::ROOT_DIR = (char *) "/var/www/html/";
+char *Configuration::ROOT_DIR = (char *) "/var/www/html/http-test-suite/";
 
 #endif //HTTP_SERVER_MLCOURSE_CONFIGURATION_H
