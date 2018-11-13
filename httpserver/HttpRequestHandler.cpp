@@ -61,7 +61,7 @@ namespace http {
 
                 return;
             }
-            if (access(fullPath.c_str(), 3) == -1) {
+            if (access(fullPath.c_str(), 4) == -1) {
                 *response = HttpResponse::stockReply(HttpResponse::FORBIDDEN);
 
                 return;
