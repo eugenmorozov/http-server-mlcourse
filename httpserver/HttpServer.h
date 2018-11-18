@@ -28,6 +28,8 @@ namespace http {
 
             static void readCallback(struct bufferevent *bev, void *ctx);
 
+            static void rCallback(job_t *job);
+
             static void writeCallback(bufferevent *bev, void *ctx);
 
             static void eventCallback(struct bufferevent *bev, short events, void *ctx);
