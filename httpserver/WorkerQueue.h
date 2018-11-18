@@ -18,7 +18,9 @@ typedef struct worker{
 
 typedef struct job{
     void (*job_function)(job *job);
+    void *arg;
     void *user_data;
+    struct bufferevent* bev;
     struct job *prev;
     struct job *next;
 } job_t;
